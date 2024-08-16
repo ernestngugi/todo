@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/ernestngugi/todo/internal/apperror"
 	"github.com/ernestngugi/todo/internal/controller"
 	"github.com/ernestngugi/todo/internal/db"
 	"github.com/ernestngugi/todo/internal/forms"
@@ -21,13 +22,15 @@ func createTodo(
 
 		err := c.BindJSON(&form)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todo, err := todoController.CreateTodo(c.Request.Context(), dB, &form)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
@@ -43,13 +46,15 @@ func completeTodo(
 
 		todoID, err := strconv.ParseInt(c.Param("id"), 10, 64)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todo, err := todoController.CompleteTodo(c.Request.Context(), dB, todoID)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
@@ -67,19 +72,22 @@ func updateTodo(
 
 		err := c.BindJSON(&form)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todoID, err := strconv.ParseInt(c.Param("id"), 10, 64)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todo, err := todoController.UpdateTodo(c.Request.Context(), dB, todoID, &form)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
@@ -95,13 +103,15 @@ func todoByID(
 
 		todoID, err := strconv.ParseInt(c.Param("id"), 10, 64)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todo, err := todoController.TodoByID(c.Request.Context(), dB, todoID)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
@@ -117,13 +127,15 @@ func deleteTodo(
 
 		todoID, err := strconv.ParseInt(c.Param("id"), 10, 64)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		err = todoController.DeleteTodo(c.Request.Context(), dB, todoID)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
@@ -139,13 +151,15 @@ func listTodo(
 
 		filter, err := webutils.FilterFromContext(c)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 
 		todos, err := todoController.Todos(c.Request.Context(), dB, filter)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false})
+			appError := apperror.Wrap(err)
+			webutils.HandleError(c, appError)
 			return
 		}
 

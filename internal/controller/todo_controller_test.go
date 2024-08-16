@@ -143,5 +143,22 @@ func TestTodoController(t *testing.T) {
 			So(foundTodo2.ID, ShouldEqual, todo2.ID)
 			So(todos.Pagination.Count, ShouldEqual, 2)
 		})
+
+		Convey("can get todo by id", func() {
+
+			todo, err := repository.CreateTodo(ctx, dB)
+			So(err, ShouldBeNil)
+
+			foundTodo, err := todoController.TodoByID(ctx, dB, todo.ID)
+			So(err, ShouldBeNil)
+
+			So(foundTodo.ID, ShouldEqual, todo.ID)
+			So(foundTodo.Title, ShouldEqual, todo.Title)
+			So(foundTodo.Description, ShouldEqual, todo.Description)
+			So(foundTodo.Completed, ShouldBeFalse)
+			So(foundTodo.CompletedAt, ShouldBeZeroValue)
+			So(foundTodo.CreatedAt, ShouldNotBeZeroValue)
+			So(foundTodo.UpdatedAt, ShouldNotBeZeroValue)
+		})
 	}))
 }

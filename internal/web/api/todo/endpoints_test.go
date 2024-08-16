@@ -12,6 +12,7 @@ import (
 	"github.com/ernestngugi/todo/internal/db"
 	"github.com/ernestngugi/todo/internal/entities"
 	"github.com/ernestngugi/todo/internal/forms"
+	"github.com/ernestngugi/todo/internal/mocks"
 	"github.com/ernestngugi/todo/internal/repository"
 	"github.com/ernestngugi/todo/internal/testutils"
 	"github.com/ernestngugi/todo/internal/web/middleware"
@@ -27,7 +28,9 @@ func TestTodoEndpoints(t *testing.T) {
 
 	ctx := context.Background()
 
-	todoController := controller.NewTestTodoController()
+	redisManager := mocks.NewMockRedisProvider()
+
+	todoController := controller.NewTestTodoController(redisManager)
 
 	Convey("TestTodoEndpoints", t, testutils.WithTestDB(ctx, testDB, func(ctx context.Context, dB db.DB) {
 

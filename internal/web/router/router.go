@@ -35,7 +35,9 @@ func BuildRouter(
 
 	todoRepository := repository.NewTodoRepository()
 
-	todoController := controller.NewTodoController(todoRepository)
+	cacheController := controller.NewCacheController(redisManager)
+
+	todoController := controller.NewTodoController(cacheController, todoRepository)
 
 	todo.AddOpenEndpoints(appRouter, dB, todoController)
 

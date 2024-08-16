@@ -21,3 +21,6 @@ down:
 
 test:
 	DATABASE_URL=postgres://todo:password@localhost:5433/todo?sslmode=disable go test ./...
+
+server:
+	gow run cmd/todo/main.go -e .env
